@@ -1,0 +1,15 @@
+.vehicle-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* gap: 2rem; */
+  /* padding: 2rem; */
+  position: relative;
+  /* top: -2rem; */
+}
+
+.vehicle-container h1 {
+  margin-bottom: 2rem;
+}

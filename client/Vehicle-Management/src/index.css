@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Prompt", sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+    width: 0;
+}
+
+:root {
+  --main-color: #2f53b6;
+  --main-text-color: rgb(255, 255, 255);
+  --main-text-color2: rgb(0, 0, 0);
+
+  --background-color: rgb(255, 255, 255);
+  --foreground-color: rgb(238, 238, 238);
+  --primary-text-color: rgb(0, 0, 0);
+  --secondary-text-color: rgb(192, 192, 192);
+
+  --toggle-theme-bg: yellow;
+
+  --table-color1: rgba(238, 238, 238, 0.6);
+}
+
+[data-theme="dark"] {
+  --main-color: #ff5900;
+  --main-text-color: rgb(255, 255, 255);
+
+  --background-color: rgb(0, 0, 0);
+  --foreground-color: rgb(30, 30, 30);
+  --primary-text-color: rgb(255, 255, 255);
+  --secondary-text-color: rgb(55, 55, 55);
+
+  --toggle-theme-bg: navy;
+
+  --table-color1: rgba(30, 30, 30, 0.6);
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--background-color);
+}

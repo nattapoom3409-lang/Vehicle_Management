@@ -1,0 +1,47 @@
+
+.theme-toggle-wrapper {
+  position: relative;
+  width: 4.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.theme-toggle-wrapper input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Track */
+.theme-track {
+  position: absolute;
+  inset: 0;
+  background: var(--foreground-color);
+  border-radius: 2.5rem;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem; /* ใช้ rem ให้สัมพันธ์ */
+}
+
+/* Thumb */
+.theme-thumb {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--background-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1rem;
+  transition: 0.2s;
+  color: var(--primary-text-color);
+}
+
+/* ระยะเลื่อน = ความกว้างทั้งหมด - thumb - padding*2 */
+.theme-toggle-wrapper input:checked + .theme-track .theme-thumb {
+  transform: translateX(2rem);
+}

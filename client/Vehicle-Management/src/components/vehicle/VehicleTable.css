@@ -1,0 +1,116 @@
+.table-wrapper {
+  margin-top: 2rem;
+  width: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+
+  border: 2px solid var(--foreground-color);
+  border-radius: 1rem;
+  box-shadow: var(--foreground-color) 0px 0.5rem 1.5rem 0px;
+}
+.vehicle-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--primary-text-color);
+  text-align: center;
+  border-radius: 1rem;
+  /* background-color: aqua; */
+  overflow: visible;
+}
+
+thead {
+  background-color: var(--foreground-color);
+  border-radius: 1rem;
+}
+
+.vehicle-table thead th {
+  padding: 1rem;
+  border-bottom: 2px solid var(--foreground-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--primary-text-color);
+  font-size: 1rem;
+}
+.vehicle-table tbody tr {
+  transition: 0.2s;
+}
+.vehicle-table tbody td {
+  padding: 0.5rem;
+  vertical-align: middle;
+  font-size: 1rem;
+  transition: 0.2s;
+
+  /* border-bottom: 2px solid var(--foreground-color); */
+}
+.vehicle-table tbody td:hover {
+  /* background-color: var(--table-color1); */
+  /* color: var(--main-color); */
+}
+.vehicle-table tbody tr:hover {
+  background-color: var(--table-color1);
+}
+
+/* ตกแต่งช่องทะเบียนรถ */
+.plate-cell {
+  font-family: "Inter", sans-serif; /* หรือ font ที่อ่านง่ายๆ */
+  color: var(--primary-text-color);
+}
+.vehicle-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-badge {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--main-text-color);
+}
+
+.status-badge.parked {
+  background: limegreen;
+}
+
+.status-badge.checked_out {
+  background: red;
+}
+
+.status-badge.maintenance {
+  background: yellow;
+  color: black;
+}
+
+.status-badge.overdue {
+  background: purple;
+}
+
+/* ////////////////////////////////// */
+
+.view-detail-link {
+
+  /* justify-content: center;
+  align-items: center; */
+
+}
+.view-btn {
+  background-color: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: aqua; */
+  /* border: none; */
+  font-size: 1.1rem;
+  color: var(--primary-text-color);
+  transition: 0.2s;
+}
+.view-btn:hover {
+  color: var(--main-color);
+  scale: 1.05;
+}
+.view-btn:active {
+  scale: 0.95;
+}

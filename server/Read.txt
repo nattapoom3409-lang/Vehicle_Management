@@ -1,0 +1,20 @@
+npm init -y
+
+npm i nodemon cors jsonwebtoken bcryptjs dotenv express mysql2
+
+config/
+เก็บ config ภายนอก เช่น database
+controllers/
+เขียน logic จริง เช่น login, create vehicle
+middleware/
+เขียนตัวกรอง เช่น verify token, check role
+routes/
+แค่กำหนด endpoint แล้วเรียก controller
+
+server.js
+
+รวมทุกอย่างเข้าด้วยกัน
+
+รันbackend
+cd server
+npm start

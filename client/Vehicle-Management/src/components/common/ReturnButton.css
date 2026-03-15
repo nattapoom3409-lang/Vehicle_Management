@@ -1,0 +1,27 @@
+.return-btn {
+    /* background-color: aqua; */
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding:  0 1rem 0 0.5rem;
+    height: 3rem;
+    border-radius: 3rem;
+    background-color: var(--foreground-color);
+    color: var(--primary-text-color);
+    border: none;
+    transition: 0.2s;
+}
+.return-btn:hover {
+    scale: 1.05;
+}
+.return-btn:active {
+    scale: 0.95;
+}
+.return-btn span {
+        /* background-color: aqua; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
