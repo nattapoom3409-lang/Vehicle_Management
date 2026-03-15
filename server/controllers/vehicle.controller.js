@@ -105,9 +105,12 @@ exports.addVehicle = async (req, res) => {
     const userId = req.user ? req.user.id : null;
 
     // 1. Insert ข้อมูลรถใหม่
+    const image = req.file ? req.file.filename : null;
+
     const [result] = await connection.query(
-      `INSERT INTO vehicles (plate_number, brand, model, color, vehicle_type_id, owner_name, owner_phone, current_slot_id, current_status) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'parked')`,
+      `INSERT INTO vehicles 
+        (plate_number, brand, model, color, vehicle_type_id, owner_name, owner_phone, current_slot_id, current_status, image)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'parked', ?)`,
       [
         plate_number,
         brand,
@@ -117,6 +120,7 @@ exports.addVehicle = async (req, res) => {
         owner_name,
         owner_phone,
         slot_id,
+        image,
       ],
     );
 
@@ -293,23 +297,48 @@ exports.checkoutVehicle = async (req, res) => {
 };
 
 exports.setMaintenance = async (req, res) => {
+  const connection = await pool.getConnection();
+
   try {
+    await connection.beginTransaction();
+
     const vehicleId = req.params.id;
     const { reason } = req.body;
 
-    await pool.query(
-      `
-      UPDATE vehicles 
-      SET current_status='maintenance',
-      maintenance_reason=?
-      WHERE id=?
-      `,
-      [reason, vehicleId],
+    const [vehicle] = await connection.query(
+      "SELECT current_slot_id FROM vehicles WHERE id=?",
+      [vehicleId]
     );
 
+    const slotId = vehicle[0].current_slot_id;
+
+    // update vehicle
+    await connection.query(
+      `UPDATE vehicles 
+       SET current_status='maintenance',
+           maintenance_reason=?,
+           current_slot_id=NULL
+       WHERE id=?`,
+      [reason, vehicleId]
+    );
+
+    // release slot
+    if (slotId) {
+      await connection.query(
+        "UPDATE warehouse_slots SET status='available' WHERE id=?",
+        [slotId]
+      );
+    }
+
+    await connection.commit();
+
     res.json({ message: "Vehicle set to maintenance" });
+
   } catch (err) {
+    await connection.rollback();
     res.status(500).json({ message: "Server error" });
+  } finally {
+    connection.release();
   }
 };
 
@@ -324,7 +353,7 @@ exports.deleteVehicle = async (req, res) => {
     // 1. หา slot ของรถ
     const [vehicle] = await connection.query(
       "SELECT current_slot_id FROM vehicles WHERE id=?",
-      [vehicleId]
+      [vehicleId],
     );
 
     if (!vehicle.length) {
@@ -334,29 +363,23 @@ exports.deleteVehicle = async (req, res) => {
     const slotId = vehicle[0].current_slot_id;
 
     // 2. ลบ vehicle
-    await connection.query(
-      "DELETE FROM vehicles WHERE id=?",
-      [vehicleId]
-    );
+    await connection.query("DELETE FROM vehicles WHERE id=?", [vehicleId]);
 
     // 3. คืน slot
     if (slotId) {
       await connection.query(
         "UPDATE warehouse_slots SET status='available' WHERE id=?",
-        [slotId]
+        [slotId],
       );
     }
 
     await connection.commit();
 
     res.json({ message: "Vehicle deleted and slot released" });
-
   } catch (err) {
-
     await connection.rollback();
     console.error(err);
     res.status(500).json({ message: "Server error" });
-
   } finally {
     connection.release();
   }

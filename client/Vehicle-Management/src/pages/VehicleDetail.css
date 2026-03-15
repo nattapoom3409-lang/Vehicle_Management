@@ -1,13 +1,12 @@
 .vehicle-detail-container {
-  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
-  /* /* justify-content: center; */
   align-items: center;
-  /* display: grid; */
   gap: 1rem;
   position: relative;
+
   width: 100%;
+  margin: 0 auto;
 }
 .vehicle-detail-container .vehicle-detail-header .return-btn {
   position: absolute;
@@ -19,6 +18,16 @@
   background-color: var(--foreground-color);
   padding: 1.5rem;
   border-radius: 1.5rem;
+}
+
+.detail-card .vehicle-picture {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  
 }
 
 .detail-card-group {
@@ -191,17 +200,17 @@
   background-color: var(--background-color);
   position: absolute;
   width: 15dvw;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   padding: 0.25rem;
   border-radius: 0.5rem;
   color: var(--primary-text-color);
   /* gap: 0.25rem; */
   box-shadow: var(--foreground-color) 0px 7px 29px 0px;
   border: 2px solid var(--foreground-color);
-  max-height: 10rem;
+  height: 250px;    
   overflow-y: auto;
 }
 

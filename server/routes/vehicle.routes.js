@@ -2,8 +2,7 @@ const express = require("express");
 const verifyToken = require("../middleware/auth.middleware");
 const authorize = require("../middleware/role.middleware");
 const controller = require("../controllers/vehicle.controller");
-
-// const
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -17,8 +16,13 @@ router.get(
 );
 router.get("/types", verifyToken, authorize(0), controller.getVehicleTypes);
 
-router.post("/", verifyToken, authorize(1), controller.addVehicle);
-
+router.post(
+  "/",
+  verifyToken,
+  authorize(1),
+  upload.single("vehicleImage"),
+  controller.addVehicle
+);
 // action routes ก่อน
 router.post("/:id/move-slot", verifyToken, authorize(1), controller.moveSlot);
 router.post(
@@ -39,7 +43,7 @@ router.post(
   "/:id/checkin",
   verifyToken,
   authorize(1),
-  controller.checkinVehicle
+  controller.checkinVehicle,
 );
 // detail route ไว้ล่างสุด
 router.get("/:id", verifyToken, authorize(0), controller.getVehicleDetail);

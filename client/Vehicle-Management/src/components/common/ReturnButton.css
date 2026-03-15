@@ -15,6 +15,7 @@
 }
 .return-btn:hover {
     scale: 1.05;
+    color: var(--main-color);
 }
 .return-btn:active {
     scale: 0.95;

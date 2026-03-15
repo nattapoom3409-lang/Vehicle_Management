@@ -19,6 +19,7 @@ function AddVehicle({ onClose }) {
   const [openType, setOpenType] = useState(false);
   const [openSlot, setOpenSlot] = useState(false);
 
+  const [image, setImage] = useState(null);
   const typeRef = useRef(null);
   const slotRef = useRef(null);
 
@@ -82,13 +83,24 @@ function AddVehicle({ onClose }) {
     }
 
     try {
+      const formData = new FormData();
+
+      formData.append("plate_number", form.plate_number);
+      formData.append("brand", form.brand);
+      formData.append("model", form.model);
+      formData.append("color", form.color);
+      formData.append("vehicle_type_id", form.vehicle_type_id);
+      formData.append("owner_name", form.owner_name);
+      formData.append("owner_phone", form.owner_phone);
+      formData.append("slot_id", form.slot_id);
+      formData.append("vehicleImage", image);
+
       const response = await fetch("http://localhost:3001/api/vehicles", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: formData,
       });
 
       if (response.ok) {
@@ -210,8 +222,7 @@ function AddVehicle({ onClose }) {
                     </div>
 
                     {/* Vehicle Type Dropdown */}
-                    <div className="select-form "
-                    >
+                    <div className="select-form ">
                       <div className="select-form-group" ref={typeRef}>
                         <div
                           className={`dropdown-title ${openType ? "active" : ""}`}
@@ -245,6 +256,16 @@ function AddVehicle({ onClose }) {
                           </div>
                         )}
                       </div>
+                    </div>
+
+                    {/* Vehicle Picture */}
+                    <div className="input-form file">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setImage(e.target.files[0])}
+                      />
+                      <label>Vehicle Image</label>
                     </div>
                   </div>
                 </div>

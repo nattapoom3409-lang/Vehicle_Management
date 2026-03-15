@@ -23,6 +23,9 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/warehouse", warehouseRoutes);
 
+app.use("/uploads", express.static("uploads"));
+
+
 // app.use("/api/slots", slotRoutes);
 // app.use("/api/movements", movementRoutes);
 // app.use("/api/payments", paymentRoutes);

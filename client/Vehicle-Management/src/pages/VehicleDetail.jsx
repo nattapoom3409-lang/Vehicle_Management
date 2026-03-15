@@ -160,13 +160,20 @@ function VehicleDetail() {
       <div className="vehicle-detail-header">
         <h1>Vehicle Detail</h1>
 
-        <ReturnButton onClick={() => navigate("/vehicles")} className="return-btn"/>
+        <ReturnButton
+          onClick={() => navigate("/vehicles")}
+          className="return-btn"
+        />
       </div>
 
       <div className="detail-card-group">
         <div className="detail-card-section">
           <div className="detail-card">
             <h3>Vehicle Picture</h3>
+            <img
+              src={`${API_BASE}/uploads/vehicles/${vehicle.image}`}
+              className="vehicle-picture"
+            />
           </div>
         </div>
         <div className="detail-card-section">
