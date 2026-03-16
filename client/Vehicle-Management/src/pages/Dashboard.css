@@ -192,7 +192,8 @@ text-align: left;
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(3rem, 3rem));
+  /* grid-template-columns: repeat(auto-fit, minmax(2.5rem, 2.5rem)); */
+  grid-template-columns: repeat(10,1fr);
   gap: 0.5rem;
 }
 

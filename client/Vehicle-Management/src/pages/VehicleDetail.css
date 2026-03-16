@@ -96,7 +96,7 @@
 /* ===== Parking History Table ===== */
 
 .history-wrapper {
-  max-height: 250px;
+  max-height: 240px;
   overflow-y: auto;
 }
 

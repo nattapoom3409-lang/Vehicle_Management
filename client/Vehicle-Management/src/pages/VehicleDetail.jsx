@@ -169,7 +169,7 @@ function VehicleDetail() {
       <div className="detail-card-group">
         <div className="detail-card-section">
           <div className="detail-card">
-            <h3>Vehicle Picture</h3>
+            <h2>Vehicle Picture</h2>
             <img
               src={`${API_BASE}/uploads/vehicles/${vehicle.image}`}
               className="vehicle-picture"
@@ -223,7 +223,7 @@ function VehicleDetail() {
 
           {/* Owner */}
           <div className="detail-card">
-            <h2>Owner</h2>
+            <h2>Owner Info</h2>
 
             <div className="detail-grid">
               <div>

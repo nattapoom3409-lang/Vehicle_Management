@@ -232,11 +232,22 @@ function Dashboard() {
                   <span>{a.plate_number}</span>
                   {" - "}
                   <span className={a.movement_type}>
-                    {a.movement_type === "check_in" ? "IN" : "OUT"}
+                    {a.movement_type === "check_in"
+                      ? "IN"
+                      : a.movement_type === "check_out"
+                        ? "OUT"
+                        : "MOVE"}
                   </span>
                 </div>
-
-                <span>{new Date(a.movement_time).toLocaleTimeString()}</span>
+                <span>
+                  {new Date(a.movement_time).toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </div>
             ))}
           </div>
