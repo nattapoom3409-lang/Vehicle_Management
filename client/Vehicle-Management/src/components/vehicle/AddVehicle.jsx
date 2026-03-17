@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "./addVehicle.css";
 
 function AddVehicle({ onClose }) {
+  const API_BASE = "http://localhost:3001";
   const [form, setForm] = useState({
     plate_number: "",
     brand: "",
@@ -34,13 +35,13 @@ function AddVehicle({ onClose }) {
 
   useEffect(() => {
     // Fetch slots and map 'slot_code' to 'slot_number' for UI consistency
-    fetch("http://localhost:3001/api/vehicles/available-slots", fetchOptions)
+    fetch(`${API_BASE}/api/vehicles/available-slots`, fetchOptions)
       .then((res) => res.json())
       .then((data) => setSlots(data))
       .catch((err) => console.error("Error loading slots:", err));
 
     // Fetch types and map 'type_name' to 'name'
-    fetch("http://localhost:3001/api/vehicles/types", fetchOptions)
+    fetch(`http://localhost:3001/api/vehicles/types`, fetchOptions)
       .then((res) => res.json())
       .then((data) => setTypes(data))
       .catch((err) => console.error("Error loading types:", err));
@@ -95,7 +96,7 @@ function AddVehicle({ onClose }) {
       formData.append("slot_id", form.slot_id);
       formData.append("vehicleImage", image);
 
-      const response = await fetch("http://localhost:3001/api/vehicles", {
+      const response = await fetch(`${API_BASE}/api/vehicles`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -296,10 +297,11 @@ function AddVehicle({ onClose }) {
                   </div>
                 </div>
 
+                {/* Parking Slots */}
                 <div className="select-slots">
                   <h2>Parking Slots</h2>
                   <div className="select-form">
-                    <div className="select-form-group">
+                    <div className="select-form-group"  ref={slotRef}>
                       <div
                         className={`dropdown-title ${openSlot ? "active" : ""}`}
                         onClick={() => setOpenSlot(!openSlot)}

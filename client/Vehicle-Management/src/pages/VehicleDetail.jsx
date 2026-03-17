@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "./VehicleDetail.css";
@@ -15,15 +15,42 @@ function VehicleDetail() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(false);
-
+  const [editForm, setEditForm] = useState({
+    plate_number: "",
+    vehicle_type_id: "",
+    brand: "",
+    model: "",
+    color: "",
+    owner_name: "",
+    owner_phone: "",
+  });
+  const [openEditInfo, setOpenEditInfo] = useState(false);
+  const [vehicleTypes, setVehicleTypes] = useState([]);
   const [availableSlots, setAvailableSlots] = useState([]);
   const [showSlotModal, setShowSlotModal] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [actionType, setActionType] = useState(""); // move | checkin
+  const [openTypeDropdown, setOpenTypeDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     fetchVehicleData();
+    fetchVehicleTypes();
   }, [id]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenTypeDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const fetchVehicleData = async () => {
     try {
@@ -67,17 +94,64 @@ function VehicleDetail() {
     }
   };
 
+  const fetchVehicleTypes = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/vehicles/types`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const data = await res.json();
+      setVehicleTypes(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleChange = (e) => {
+    setEditForm({
+      ...editForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/vehicles/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (res.ok) {
+        setOpenEditInfo(false);
+        fetchVehicleData();
+      } else {
+        alert("Update failed");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleConfirmSlot = async () => {
     if (!selectedSlot) return alert("Please select slot");
 
     let endpoint = "";
+    let body = {};
 
     if (actionType === "move") {
       endpoint = `/api/vehicles/${id}/move-slot`;
+      body = { new_slot_id: selectedSlot };
     }
 
     if (actionType === "checkin") {
       endpoint = `/api/vehicles/${id}/checkin`;
+      body = { slot_id: selectedSlot };
     }
 
     try {
@@ -87,10 +161,7 @@ function VehicleDetail() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({
-          new_slot_id: selectedSlot,
-          slot_id: selectedSlot,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (res.ok) {
@@ -211,12 +282,15 @@ function VehicleDetail() {
                 <label>Status</label>
                 <p className={`status ${vehicle.current_status}`}>
                   {vehicle.current_status}
+                  
                 </p>
               </div>
 
               <div>
                 <label>Current Slot</label>
-                <p>{vehicle.slot_code || "-"}</p>
+                <p>{vehicle.slot_code || "-"}
+                    
+                </p>
               </div>
             </div>
           </div>
@@ -285,6 +359,23 @@ function VehicleDetail() {
             {isEmployee && vehicle.current_status === "parked" && (
               <>
                 <button
+                  className="btn edit-info"
+                  onClick={() => {
+                    setEditForm({
+                      plate_number: vehicle.plate_number,
+                      vehicle_type_id: vehicle.vehicle_type_id,
+                      brand: vehicle.brand,
+                      model: vehicle.model,
+                      color: vehicle.color,
+                      owner_name: vehicle.owner_name,
+                      owner_phone: vehicle.owner_phone,
+                    });
+                    setOpenEditInfo(true);
+                  }}
+                >
+                  Edit Info
+                </button>
+                <button
                   className="btn move-slot"
                   onClick={() => fetchSlots("move")}
                 >
@@ -301,16 +392,6 @@ function VehicleDetail() {
               </>
             )}
 
-            {/* checked out */}
-            {isEmployee && vehicle.current_status === "checked_out" && (
-              <button
-                className="btn checkin"
-                onClick={() => fetchSlots("checkin")}
-              >
-                Check In
-              </button>
-            )}
-
             {/* maintenance */}
             {isEmployee && vehicle.current_status === "maintenance" && (
               <button
@@ -318,6 +399,16 @@ function VehicleDetail() {
                 onClick={() => fetchSlots("checkin")}
               >
                 Return to Parking
+              </button>
+            )}
+
+            {/* checked out */}
+            {isEmployee && vehicle.current_status === "checked_out" && (
+              <button
+                className="btn checkin"
+                onClick={() => fetchSlots("checkin")}
+              >
+                Check In
               </button>
             )}
 
@@ -370,6 +461,171 @@ function VehicleDetail() {
               <div className="modal-actions">
                 <button onClick={handleConfirmSlot}>Confirm</button>
                 <button onClick={() => setShowSlotModal(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {openEditInfo && (
+          <div
+            className="edit-info-overlay"
+            onClick={() => setOpenEditInfo(false)}
+          >
+            <div
+              className="edit-info-container"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setOpenEditInfo(false)}
+                className="close-btn"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-x-icon lucide-x"
+                >
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+
+              <h2>Edit Info ({vehicle.plate_number})</h2>
+
+              <div>
+                <h3>Vehicle Info</h3>
+                <div className="edit-grid">
+                  <div className="input-group">
+                    <input
+                      name="plate_number"
+                      value={editForm.plate_number}
+                      onChange={handleChange}
+                      placeholder="Plate Number"
+                    />
+                    <label>Plate Number</label>
+                  </div>
+
+                  <div className="input-group">
+                    <div
+                      className={`custom-dropdown ${openTypeDropdown ? "active" : ""}`}
+                      ref={dropdownRef}
+                    >
+                      <div
+                        className={`dropdown-selected ${openTypeDropdown ? "active" : ""}`}
+                        onClick={() => setOpenTypeDropdown(!openTypeDropdown)}
+                      >
+                        {editForm.vehicle_type_id
+                          ? vehicleTypes.find(
+                              (t) => t.id == editForm.vehicle_type_id,
+                            )?.name
+                          : "-- Select Vehicle Type --"}
+
+                        <span className="arrow">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-chevron-down-icon lucide-chevron-down"
+                          >
+                            <path d="m6 9 6 6 6-6" />
+                          </svg>
+                        </span>
+                      </div>
+
+                      {openTypeDropdown && (
+                        <div className="dropdown-menu">
+                          {vehicleTypes.map((type) => (
+                            <div
+                              key={type.id}
+                              className="dropdown-item"
+                              onClick={() => {
+                                setEditForm({
+                                  ...editForm,
+                                  vehicle_type_id: type.id,
+                                });
+                                setOpenTypeDropdown(false);
+                              }}
+                            >
+                              {type.name}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <label>Vehicle Type</label>
+                  </div>
+
+                  <div className="input-group">
+                    <input
+                      name="brand"
+                      value={editForm.brand}
+                      onChange={handleChange}
+                      placeholder="Brand"
+                    />
+                    <label>Brand</label>
+                  </div>
+
+                  <div className="input-group">
+                    <input
+                      name="model"
+                      value={editForm.model}
+                      onChange={handleChange}
+                      placeholder="Model"
+                    />
+                    <label>Model</label>
+                  </div>
+
+                  <div className="input-group">
+                    <input
+                      name="color"
+                      value={editForm.color}
+                      onChange={handleChange}
+                      placeholder="Color"
+                    />
+                    <label>Color</label>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3>Owner Info</h3>
+                <div className="edit-grid">
+                  <div className="input-group">
+                    <input
+                      name="owner_name"
+                      value={editForm.owner_name}
+                      onChange={handleChange}
+                      placeholder="Owner Name"
+                    />
+                    <label>Owner Name</label>
+                  </div>
+
+                  <div className="input-group">
+                    <input
+                      name="owner_phone"
+                      value={editForm.owner_phone}
+                      onChange={handleChange}
+                      placeholder="Phone"
+                    />
+                    <label>Phone Number</label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button onClick={handleUpdate}>Save</button>
               </div>
             </div>
           </div>

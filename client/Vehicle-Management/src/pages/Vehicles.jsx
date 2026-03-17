@@ -13,6 +13,7 @@ function Vehicle() {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchParams, setSearchParams] = useState({ text: "", filters: {} });
+const [vehicleTypes, setVehicleTypes] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const vehiclesPerPage = 10;
@@ -23,21 +24,21 @@ function Vehicle() {
   const totalPages = Math.ceil(vehicles.length / vehiclesPerPage);
 
   const currentVehicles = vehicles.slice(indexOfFirst, indexOfLast);
-  const filters = [
-    {
-      label: "Status",
-      options: ["parked", "checked_out", "maintenance", "overdue"],
-    },
-    {
-      label: "Vehicle Type",
-      options: ["Sedan", "SUV", "Truck"],
-    },
-  ];
+const filters = [
+  {
+    label: "Status",
+    options: ["parked", "checked_out", "maintenance", "overdue"],
+  },
+  {
+    label: "Vehicle Type",
+    options: vehicleTypes.map((t) => t.name), // ✅ dynamic
+  },
+];
 
-  const typeToId = (typeName) => {
-    const mapping = { Sedan: 1, SUV: 2, Truck: 3 };
-    return mapping[typeName];
-  };
+const typeToId = (typeName) => {
+  const found = vehicleTypes.find((t) => t.name === typeName);
+  return found?.id;
+};
 
   const fetchVehicles = async () => {
     try {
@@ -92,6 +93,25 @@ function Vehicle() {
   useEffect(() => {
     fetchVehicles();
   }, [searchParams]);
+
+  useEffect(() => {
+  const fetchTypes = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API_BASE}/api/vehicles/types`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+      setVehicleTypes(data);
+    } catch (err) {
+      console.error("Error fetching vehicle types:", err);
+    }
+  };
+
+  fetchTypes();
+}, []);
 
   return (
     <div className="vehicle-container">

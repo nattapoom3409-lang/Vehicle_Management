@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetail from "./pages/VehicleDetail";
 import Warehouse from "./pages/Warehouse";
-import Report from "./pages/Report";
+// import Report from "./pages/Report";
 import UserManagement from "./pages/UserManagement";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -28,7 +28,7 @@ function App() {
         <Route path="vehicles/:id" element={<VehicleDetail />} />
         <Route path="warehouse" element={<Warehouse />} />
         <Route path="usermanagement" element={<UserManagement />} />
-        <Route path="report" element={<Report />} />
+        {/* <Route path="report" element={<Report />} /> */}
       </Route>
     </Routes>
   );

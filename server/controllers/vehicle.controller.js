@@ -163,13 +163,11 @@ exports.getVehicleDetail = async (req, res) => {
     const [vehicle] = await pool.query(
       `
       SELECT 
-        v.*,
-        t.type_name AS vehicle_type,
-        s.slot_code
-      FROM vehicles v
-      LEFT JOIN vehicle_types t ON v.vehicle_type_id = t.id
-      LEFT JOIN warehouse_slots s ON v.current_slot_id = s.id
-      WHERE v.id = ?
+  v.*,
+  vt.type_name AS vehicle_type
+FROM vehicles v
+LEFT JOIN vehicle_types vt ON v.vehicle_type_id = vt.id
+WHERE v.id = ?
       `,
       [vehicleId],
     );
@@ -196,6 +194,49 @@ exports.getVehicleDetail = async (req, res) => {
       vehicle: vehicle[0],
       history,
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.updateVehicle = async (req, res) => {
+  try {
+    const vehicleId = req.params.id;
+
+    const {
+      plate_number,
+      brand,
+      model,
+      color,
+      vehicle_type_id,
+      owner_name,
+      owner_phone,
+    } = req.body;
+
+    await pool.query(
+      `UPDATE vehicles 
+       SET plate_number=?,
+           brand=?,
+           model=?,
+           color=?,
+           vehicle_type_id=?,
+           owner_name=?,
+           owner_phone=?
+       WHERE id=?`,
+      [
+        plate_number,
+        brand,
+        model,
+        color,
+        vehicle_type_id,
+        owner_name,
+        owner_phone,
+        vehicleId,
+      ],
+    );
+
+    res.json({ message: "Vehicle updated successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
@@ -307,7 +348,7 @@ exports.setMaintenance = async (req, res) => {
 
     const [vehicle] = await connection.query(
       "SELECT current_slot_id FROM vehicles WHERE id=?",
-      [vehicleId]
+      [vehicleId],
     );
 
     const slotId = vehicle[0].current_slot_id;
@@ -319,21 +360,20 @@ exports.setMaintenance = async (req, res) => {
            maintenance_reason=?,
            current_slot_id=NULL
        WHERE id=?`,
-      [reason, vehicleId]
+      [reason, vehicleId],
     );
 
     // release slot
     if (slotId) {
       await connection.query(
         "UPDATE warehouse_slots SET status='available' WHERE id=?",
-        [slotId]
+        [slotId],
       );
     }
 
     await connection.commit();
 
     res.json({ message: "Vehicle set to maintenance" });
-
   } catch (err) {
     await connection.rollback();
     res.status(500).json({ message: "Server error" });

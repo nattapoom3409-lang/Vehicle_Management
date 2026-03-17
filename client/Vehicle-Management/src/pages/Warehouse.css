@@ -75,11 +75,11 @@
   /* background-color: aqua; */
 }
 .slot-card.available {
-  border-left: 8px solid #4caf50; /* Green */
+  border-left: 8px solid limegreen; 
 }
 
 .slot-card.occupied {
-  border-left: 8px solid #f44336; /* Red */
+  border-left: 8px solid red; 
 }
 
 .status-dot {
@@ -90,8 +90,8 @@
 }
 
 .available .status-dot {
-  background-color: #4caf50;
+  background-color: limegreen;
 }
 .occupied .status-dot {
-  background-color: #f44336;
+  background-color: red;
 }

@@ -1,0 +1,493 @@
+.user-management-container {
+  /* background-color: aqua; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.user-management-container h1 {
+  margin-bottom: 1.5rem;
+}
+
+.add-user-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  gap: 0.5rem;
+  padding: 0 1rem 0 0.5rem;
+
+  background-color: var(--foreground-color);
+  color: var(--primary-text-color);
+  border-radius: 3rem;
+  border: none;
+  transition: 0.2s;
+}
+
+.add-user-btn:hover {
+  scale: 1.05;
+  color: var(--main-color);
+}
+.add-user-btn:active {
+  scale: 0.95;
+}
+
+.add-user-btn.active {
+  color: var(--main-color);
+}
+
+.add-user-btn span {
+  /* background-color: aqua; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-form-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+.user-form {
+  background-color: var(--background-color);
+  border: 1px solid var(--foreground-color);
+  box-shadow: var(--foreground-color) 0 7px 29px 0;
+  border-radius: 1rem;
+  padding: 2rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.user-form h2 {
+  margin-bottom: 1rem;
+}
+
+.user-form .close-btn {
+  display: flex;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: transparent;
+  border: none;
+  color: var(--primary-text-color);
+  transition: 0.2s;
+  border-radius: 100%;
+}
+
+.user-form .close-btn:hover {
+  color: red;
+  /* back
+  ground-color: aqua; */
+}
+
+.user-form .user-input-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.user-form .user-input-form-group {
+  position: relative;
+}
+
+.user-form .user-input-file-group {
+  /* background-color: aqua; */
+  margin-bottom: 1rem;
+  width: 100%;
+  /* margin: 1rem; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.user-form .user-input-file-group input {
+  width: 100%;
+  border: 2px solid rgba(128, 128, 128, 1);
+  border-radius: 0.5rem;
+  height: 3rem;
+}
+
+.user-form .user-input-file-group input:focus {
+    border: 2px solid var(--main-color);
+}
+
+.user-form .user-input-file-group input.active {
+  border: 2px solid var(--main-color);
+}
+
+.user-form .user-input-file-group input::file-selector-button {
+  background-color: var(--main-color);
+  color: var(--main-text-color);
+  font-family: "Prompt", sans-serif;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  /* padding: 0.5rem 0.8rem; */
+  margin: 0.5rem 0.5rem 0.5rem -0.5rem;
+  transition: 0.2s;
+  cursor: pointer;
+  margin-left: 1.5rem;
+  /* display: block; */
+}
+
+.user-form .user-input-file-group input::file-selector-button:hover {
+  scale: 1.05;
+}
+
+.user-form .user-input-file-group label {
+  position: absolute;
+  left: 1rem;
+  font-size: 0.75rem;
+  top: 0;
+  transform: translateY(-50%);
+  padding: 0px 5px;
+  background-color: var(--background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-form .user-input-file-group {
+}
+
+.user-form .user-input-form input {
+  /* background-color: aqua; */
+  background-color: transparent;
+  height: 3rem;
+  padding: 0 1.5rem;
+  border: 2px solid rgba(128, 128, 128, 1);
+  border-radius: 0.5rem;
+  outline: none;
+  color: var(--primary-text-color);
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.user-form .user-input-form input {
+}
+
+.user-form .user-input-form input::placeholder {
+  color: transparent;
+}
+
+/* .user-form .user-input-form input:focus {
+  border: 2px solid var(--main-color);
+} */
+
+.user-form .user-input-form label {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: 0.2s;
+  background-color: transparent;
+}
+
+.user-form .user-input-form input:focus {
+  border: 2px solid var(--main-color);
+}
+
+.user-form .user-input-form input:focus + label,
+.user-form .user-input-form input:not(:placeholder-shown) + label {
+  top: 0rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  color: var(--primary-text-color);
+  background-color: var(--background-color);
+  padding: 0 5px;
+}
+
+.user-form .user-select-form-group .select-form {
+  margin: 0;
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.user-form .user-select-form-group .select-form label {
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  font-size: 0.75rem;
+  background-color: var(--background-color);
+  padding: 0 5px;
+}
+.user-form .user-select-form-group .selected-role-display {
+  width: 100%;
+  padding: 0 1rem 0 1.5rem;
+  border-radius: 8px;
+  border: 2px solid rgba(128, 128, 128, 1);
+  background: transparent;
+  color: var(--primary-text-color);
+  height: 3rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: pointer;
+  transition: 0.2s;
+  text-transform: capitalize;
+}
+
+.user-form .user-select-form-group .selected-role-display.active {
+  border: 2px solid var(--main-color);
+}
+
+.user-form .user-select-form-group .selected-role-display .arrow {
+  display: flex;
+  transition: 0.2s;
+}
+
+.user-form .user-select-form-group .selected-role-display .arrow.active {
+  transform: rotate(180deg);
+}
+
+.user-form .user-select-form-group .select-form .dropdown-menu {
+  position: absolute;
+  background-color: var(--background-color);
+  width: 100%;
+  top: 3rem;
+  padding: 0.2srem;
+  /* background-color: aqua; */
+  border-radius: 0.5rem;
+  box-shadow: var(--foreground-color) 0px 7px 29px 0px;
+  border: 1px solid var(--foreground-color);
+  z-index: 999;
+}
+
+.user-form .user-select-form-group .select-form .dropdown-menu .dropdown-item {
+  margin: 0.25rem;
+  font-size: 1rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-radius: 0.5rem;
+  padding-left: 1.25rem;
+  transition: 0.2s;
+}
+
+.user-form
+  .user-select-form-group
+  .select-form
+  .dropdown-menu
+  .dropdown-item:hover {
+  background-color: var(--main-color);
+  color: var(--main-text-color);
+}
+
+.user-form .form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.user-form .form-actions button {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--main-color);
+  color: var(--main-text-color);
+  border: none;
+  transition: 0.2s;
+}
+.user-form .form-actions button:hover {
+  scale: 1.05;
+}
+.user-form .form-actions button:active {
+  scale: 0.95;
+}
+.user-table-wrapper {
+    margin-top: 2rem;
+  width: auto;
+  position: relative;
+  overflow: visible;
+
+  border: 2px solid var(--foreground-color);
+  border-radius: 1rem;
+  box-shadow: var(--foreground-color) 0px 0.5rem 1.5rem 0px;
+  background-color: var(--foreground-color);
+    z-index: 998;
+
+}
+.user-table {
+  border-radius: 1rem;
+  border-collapse: collapse;
+  overflow: visible;
+  width: 100%;
+  overflow: visible;
+}
+.user-table thead {
+  border-radius: 1rem;
+  background-color: transparent;
+}
+
+.user-table thead th {
+  padding: 1rem;
+  border-bottom: 2px solid var(--foreground-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--primary-text-color);
+  font-size: 1rem;
+}
+
+.user-table tbody {
+  overflow: visible;
+  background-color: var(--background-color);
+}
+
+.user-table tbody tr {
+  transition: 0.2s;
+}
+.user-table tbody td {
+  padding: 0.5rem;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.user-table tbody tr:hover {
+  background-color: var(--table-color1);
+}
+
+.user-table tbody .user-name,
+.user-table tbody .role-cell {
+  text-transform: capitalize;
+}
+
+.user-table tbody .status-cell {
+  position: relative;
+  width: auto;
+  color: var(--primary-text-color);
+}
+.user-table tbody .status-cell .status-badge {
+  font-size: 1rem;
+  text-transform: capitalize;
+  color: var(--primary-text-color);
+  transition: 0.2s;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  font-weight: 600;
+  width: auto;
+  gap: 0.5rem;
+}
+
+.user-table tbody .status-cell .status-badge .arrow {
+  display: flex;
+  transition: 0.2s;
+}
+
+.user-table tbody .status-cell .status-badge .arrow.active {
+  transform: rotate(180deg);
+}
+
+.user-table tbody .status-cell .status-dropdown {
+  position: absolute;
+  width: auto;
+  color: var(--primary-text-color);
+  background-color: var(--background-color);
+  border: 1px solid var(--foreground-color);
+  box-shadow: var(--foreground-color) 0px 7px 29px 0px;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.user-table tbody .status-cell .status-dropdown .dropdown-item {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: var(--primary-text-color);
+  transition: 0.2s;
+}
+
+.user-table tbody .status-cell .status-dropdown .dropdown-item:hover {
+  background-color: var(--foreground-color);
+  cursor: pointer;
+}
+
+.user-table tbody .status-cell .status-dropdown .dropdown-item.active:hover {
+  color: limegreen;
+}
+
+.user-table tbody .status-cell .status-dropdown .dropdown-item.inactive:hover {
+  color: red;
+}
+
+.user-table tbody .action-cell {
+  position: relative;
+  /* background-color: aqua; */
+}
+.user-table tbody .action-cell .menu-btn {
+  display: flex;
+  background-color: transparent;
+  color: var(--primary-text-color);
+
+  border-radius: 50%;
+  padding: 0.25rem;
+  border: none;
+
+  margin: 0 auto;
+}
+
+.user-table tbody .action-cell .menu-btn:hover {
+  background-color: var(--foreground-color);
+}
+
+.user-table tbody .action-cell .action-menu {
+  position: absolute;
+  background-color: var(--background-color);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  /* left: 0; */
+  z-index: 999;
+  box-shadow: var(--foreground-color) 0px 7px 29px 0px;
+  border: 1px solid var(--foreground-color);
+}
+
+.user-table tbody .action-cell .action-menu button {
+  font-size: 1rem;
+  border: none;
+  height: 2rem;
+  padding: 0 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--background-color);
+  width: 100%;
+  color: var(--primary-text-color);
+}
+.user-table tbody .action-cell .action-menu button:hover {
+  background-color: var(--foreground-color);
+}
+
+.user-table tbody .action-cell .action-menu .delete:hover {
+  color: red;
+}

@@ -23,6 +23,13 @@ router.post(
   upload.single("vehicleImage"),
   controller.addVehicle
 );
+
+router.put(
+  "/:id",
+  verifyToken,
+  authorize(1),
+  controller.updateVehicle
+);
 // action routes ก่อน
 router.post("/:id/move-slot", verifyToken, authorize(1), controller.moveSlot);
 router.post(
